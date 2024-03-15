@@ -37,11 +37,16 @@ ball = GameSprite('green_ball.png',200,200,50,50,1)
 font.init()
 font2 = font.SysFont('Arial', 36)
 
+name1 = input('Первый игрок (Введите имя):')
+name2 = input('Второй игрок (Введите имя):')
+
 finish = False
 game = True
 clock = time.Clock()
 speed_x = 1
 speed_y = 1
+lose1 = font2.render((name1 + ' Ты проиграл'),True,(255,0,0))
+lose2 = font2.render((name2 + ' Ты просрал'),True,(255,0,0))
 
 while game:
     for e in event.get():
@@ -53,14 +58,20 @@ while game:
         p2.updateR()
         ball.rect.x += speed_x
         ball.rect.y += speed_y
-        #ball.rect.x < 0
         if sprite.collide_rect(p1, ball) or sprite.collide_rect(p2, ball):
             speed_x *= -1
             speed_y *= -1
         if ball.rect.y > 450 or ball.rect.y < 0:
             speed_y *= -1
+        if ball.rect.x < 0:
+            finish = True
+            window.blit(lose1,(200,200))
+        if ball.rect.x > 700:
+            finish = True
+            window.blit(lose2,(200,200))
         p1.reset()
         p2.reset()
         ball.reset()
     display.update()
     clock.tick(165)
+display.update()
